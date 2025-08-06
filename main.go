@@ -17,11 +17,6 @@ import (
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
 
-func hiimafunction(stri string) {
-	stri = "hello"
-	return stri
-}
-
 type apiConfig struct {
 	DB *database.Queries
 }
