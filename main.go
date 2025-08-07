@@ -63,15 +63,17 @@ func main() {
 		AllowCredentials: false,
 		MaxAge:           300,
 	}))
-
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Handling /")
 		f, err := staticFiles.Open("static/index.html")
 		if err != nil {
+			log.Printf("Error opening static/index.html: %v", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		defer f.Close()
 		if _, err := io.Copy(w, f); err != nil {
+			log.Printf("Error copying file: %v", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	})
@@ -89,8 +91,9 @@ func main() {
 
 	router.Mount("/v1", v1Router)
 	srv := &http.Server{
-		Addr:    ":" + port,
-		Handler: router,
+		Addr:              ":" + port,
+		Handler:           router,
+		ReadHeaderTimeout: 5,
 	}
 
 	log.Printf("Serving on port: %s\n", port)
