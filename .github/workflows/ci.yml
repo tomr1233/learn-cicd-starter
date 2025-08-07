@@ -20,7 +20,14 @@ jobs:
 
       - name: Finish Text
         run: go test ./... -cover
-  test:
+
+      - name: Install gosec
+        run: go install github.com/securego/gosec/v2/cmd/gosec@latest
+
+      - name: Check Security
+        run: gosec ./...
+        
+  style:
     name: Style
     runs-on: ubuntu-latest
 
